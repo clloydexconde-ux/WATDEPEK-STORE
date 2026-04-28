@@ -1,5 +1,5 @@
 # WATDEPEK-STORE
-WATDEPEK Marketplace is a simple, browser-based e-commerce platform built with HTML, CSS, and JavaScript. It simulates the core features of an online marketplace, allowing users to register, log in, browse products, manage a shopping cart, and even upload items as sellers.
+WATDEPEK Marketplace is a simple but you can sell anything you want, anything you needed is right here, browser-based e-commerce platform built with HTML, CSS, and JavaScript. It simulates the core features of an online marketplace, allowing users to register, log in, browse products, manage a shopping cart, and even upload items as sellers.
 
 👤 User System
 Login & Registration: Users can create accounts and log in using local storage.
