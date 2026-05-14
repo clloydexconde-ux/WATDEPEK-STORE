@@ -461,7 +461,7 @@ products.innerHTML+=`
 
 <h4>${p.name}</h4>
 
-<div class="rating">⭐⭐⭐⭐☆</div>
+<div class="rating">${"⭐".repeat(p.rating)}${"☆".repeat(5 - p.rating)}</div>
 
 <p class="price">₱${p.price}</p>
 
