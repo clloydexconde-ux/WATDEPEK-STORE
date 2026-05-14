@@ -1,43 +1,591 @@
-# WATDEPEK-STORE
-WATDEPEK Marketplace is a simple but you can sell anything you want, anything you needed is right here, browser-based e-commerce platform built with HTML, CSS, and JavaScript. It simulates the core features of an online marketplace, allowing users to register, log in, browse products, manage a shopping cart, and even upload items as sellers.
+<!DOCTYPE html>
+<html>
+<head>
+<title>WATDEPEK Marketplace</title>
 
-👤 User System
-Login & Registration: Users can create accounts and log in using local storage.
-Profile Management: Editable profile with full name, address, and contact number stored in local storage.
-Logout Functionality: Quick reload to reset session.
+<style>
 
-🛍️ Product Management
-Seller Panel: Sellers can upload products with name, price, category, and image.
-Categories: Sidebar filters for Grocery, Can, Detergent, Hardware, School, Hygiene, and Electronics.
-Search Bar: Real-time product search by name.
-Ratings: Simple rating button for user feedback.
+body{
+margin:0;
+font-family:Arial;
+background:#f5e6d3;
+}
 
-🛒 Shopping Cart
-Add to Cart: Products can be added directly from the product grid.
-Cart Panel: Slide-out cart showing items, prices, and total cost.
-Checkout: Clears cart and confirms purchase.
+/* HEADER */
 
-🎨 UI & Design
-Responsive Layout: Flexbox and CSS Grid for adaptive product display.
-Clean Styling: Warm brown and beige theme for a marketplace feel.
-Interactive Elements: Hover effects, modals, and panels for smooth navigation.
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#8b5e3c;
+color:white;
+padding:10px 20px;
+}
 
-🛠️ Tech Stack
-Frontend: HTML5, CSS3, JavaScript (Vanilla)
-Storage: LocalStorage (for users, products, cart, and profile data)
-No Backend: Entirely client-side, making it lightweight and easy to run locally.
+.logo{
+font-size:28px;
+font-weight:bold;
+}
 
-🚀 How to Use
-Clone or download the repository.
-Open index.html in any modern browser.
-Register a new account and log in.
-Explore products, add items to your cart, or upload your own products via the seller panel.
+.controls{
+display:flex;
+gap:10px;
+align-items:center;
+}
 
-📌 Project Goals
-This project is designed as a learning exercise in:
+button{
+background:#6b3e26;
+color:white;
+border:none;
+padding:7px 12px;
+cursor:pointer;
+}
 
-Building interactive web applications without frameworks.
+button:hover{
+background:#4b2a18;
+}
 
-Practicing local storage for data persistence.
+.user-img{
+width:35px;
+border-radius:50%;
+}
 
-Understanding UI/UX basics for e-commerce platforms.
+/* SEARCH */
+
+.search{
+padding:10px;
+text-align:center;
+}
+
+.search input{
+width:60%;
+padding:8px;
+}
+
+/* LAYOUT */
+
+.main{
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:200px;
+background:#e8d3b9;
+padding:15px;
+}
+
+.category{
+margin:10px 0;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* PRODUCTS */
+
+.products{
+flex:1;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.product{
+background:white;
+padding:10px;
+border-radius:10px;
+text-align:center;
+}
+
+.product img{
+width:120px;
+height:120px;
+object-fit:cover;
+}
+
+.price{
+color:#6b3e26;
+font-weight:bold;
+}
+
+.rating{
+color:gold;
+}
+
+/* LOGIN */
+
+#loginPage{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.login-box{
+background:white;
+padding:30px;
+border-radius:10px;
+text-align:center;
+}
+
+input{
+padding:7px;
+margin:5px;
+}
+
+/* SELLER PANEL */
+
+#sellerPanel{
+display:none;
+padding:20px;
+background:#e8d3b9;
+}
+
+/* CART PANEL */
+
+#cartPanel{
+position:fixed;
+right:0;
+top:0;
+width:250px;
+height:100%;
+background:white;
+border-left:3px solid #8b5e3c;
+padding:15px;
+display:none;
+overflow:auto;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginPage">
+
+<div class="login-box">
+
+<h2>WATDEPEK</h2>
+
+<input id="username" placeholder="Username"><br>
+<input id="password" type="password" placeholder="Password"><br>
+
+<button onclick="login()">Login</button>
+<button onclick="register()">Register</button>
+
+</div>
+
+</div>
+
+<!-- MAIN SITE -->
+
+<div id="site" style="display:none;">
+
+<div class="header">
+
+<button onclick="openProfile()">👤 Profile</button>
+<div class="logo">WATDEPEK</div>
+
+<div class="controls">
+
+<button onclick="toggleCart()">🛒 Cart</button>
+
+
+<img class="user-img" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+
+<button onclick="sellerMode()">Seller</button>
+<button onclick="logout()">Logout</button>
+
+</div>
+
+</div>
+
+<div class="search">
+<input id="searchInput" placeholder="Search product..." onkeyup="searchProduct()">
+</div>
+
+<div class="main">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="category" onclick="filterCategory('All')">All</div>
+<div class="category" onclick="filterCategory('Grocery')">🛒 Grocery</div>
+<div class="category" onclick="filterCategory('Can')">🥫 Can</div>
+<div class="category" onclick="filterCategory('Detergent')">🧼 Detergent</div>
+<div class="category" onclick="filterCategory('Hardware')">🔧 Hardware</div>
+<div class="category" onclick="filterCategory('School')">📚 School</div>
+<div class="category" onclick="filterCategory('Hygiene')">🪥 Hygiene</div>
+<div class="category" onclick="filterCategory('Electronics')">💻 Electronics</div>
+
+</div>
+
+<div id="products" class="products"></div>
+
+</div>
+
+</div>
+
+<!-- SELLER PANEL -->
+
+<div id="sellerPanel">
+
+<h3>Add Product</h3>
+
+<input id="pname" placeholder="Product Name">
+<input id="pprice" placeholder="Price">
+
+<select id="pcategory">
+<option>Grocery</option>
+<option>Can</option>
+<option>Detergent</option>
+<option>Hardware</option>
+<option>School</option>
+<option>Hygiene</option>
+<option>Electronics</option>
+</select>
+
+<input type="file" id="pimage">
+
+<button onclick="addProduct()">Upload Product</button>
+
+</div>
+
+<!-- CART -->
+<div id="profilePanel" style="
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:white;
+padding:20px;
+border-radius:10px;
+display:none;
+width:300px;
+box-shadow:0 0 10px rgba(0,0,0,0.3);
+">
+
+<div style="display:flex;justify-content:space-between;">
+<h3>User Profile</h3>
+<button onclick="closeProfile()">X</button>
+</div>
+
+<input id="fullname" placeholder="Full Name"><br>
+<input id="address" placeholder="Address"><br>
+<input id="contact" placeholder="Contact Number"><br>
+
+<button onclick="saveProfile()">Save</button>
+
+</div>
+
+<div id="cartPanel">
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+<h3>Your Cart</h3>
+<button onclick="closeCart()">X</button>
+</div>
+
+<div id="cartItems"></div>
+
+<h4 id="totalPrice">Total: ₱0</h4>
+
+<button onclick="checkout()">Checkout</button>
+
+</div>
+
+<script>
+
+/* OPEN PROFILE */
+
+function openProfile(){
+
+profilePanel.style.display="block"
+
+let profile = JSON.parse(localStorage.getItem("profile")) || {}
+
+fullname.value = profile.fullname || ""
+address.value = profile.address || ""
+contact.value = profile.contact || ""
+
+}
+
+/* CLOSE PROFILE */
+
+function closeProfile(){
+
+profilePanel.style.display="none"
+
+}
+
+/* SAVE PROFILE */
+
+function saveProfile(){
+
+let profile = {
+
+fullname: fullname.value,
+address: address.value,
+contact: contact.value
+
+}
+
+localStorage.setItem("profile",JSON.stringify(profile))
+
+alert("Profile Updated")
+
+closeProfile()
+
+}
+
+/* USERS */
+
+function register(){
+
+let users=JSON.parse(localStorage.getItem("users"))||[]
+
+let user=username.value
+let pass=password.value
+
+users.push({user,pass})
+
+localStorage.setItem("users",JSON.stringify(users))
+
+alert("Account created")
+
+}
+
+function login(){
+
+let users=JSON.parse(localStorage.getItem("users"))||[]
+
+let user=username.value
+let pass=password.value
+
+let found=users.find(u=>u.user===user && u.pass===pass)
+
+if(found){
+
+loginPage.style.display="none"
+site.style.display="block"
+
+loadProducts()
+
+}else{
+
+alert("Your password is incorrect")
+
+}
+
+}
+
+function logout(){
+
+location.reload()
+
+}
+
+/* SELLER MODE */
+
+function sellerMode(){
+
+sellerPanel.style.display="block"
+
+}
+
+function userMode(){
+
+sellerPanel.style.display="none"
+
+}
+
+/* PRODUCTS */
+
+function addProduct(){
+
+let name=pname.value
+let price=pprice.value
+let category=pcategory.value
+let file=pimage.files[0]
+
+let reader=new FileReader()
+
+reader.onload=function(){
+
+let products=JSON.parse(localStorage.getItem("products"))||[]
+
+products.push({
+name,
+price,
+category,
+image:reader.result,
+rating:0
+})
+
+localStorage.setItem("products",JSON.stringify(products))
+
+loadProducts()
+
+alert("Product Uploaded")
+
+}
+
+reader.readAsDataURL(file)
+
+}
+
+function loadProducts(){
+
+let products=JSON.parse(localStorage.getItem("products"))||[]
+
+displayProducts(products)
+
+}
+
+function displayProducts(list){
+
+products.innerHTML=""
+
+list.forEach((p,i)=>{
+
+products.innerHTML+=`
+
+<div class="product">
+
+<img src="${p.image}">
+
+<h4>${p.name}</h4>
+
+<div class="rating">${"⭐".repeat(p.rating)}${"☆".repeat(5 - p.rating)}</div>
+
+<p class="price">₱${p.price}</p>
+
+<button onclick="addCart(${i})">Add to Cart</button>
+
+<button onclick="rate(${i})">⭐ Rate</button>
+
+</div>
+
+`
+
+})
+
+}
+
+/* SEARCH */
+
+function searchProduct(){
+
+let text=searchInput.value.toLowerCase()
+
+let products=JSON.parse(localStorage.getItem("products"))||[]
+
+let filtered=products.filter(p=>p.name.toLowerCase().includes(text))
+
+displayProducts(filtered)
+
+}
+
+/* CATEGORY */
+
+function filterCategory(cat){
+
+let products=JSON.parse(localStorage.getItem("products"))||[]
+
+if(cat=="All"){
+
+displayProducts(products)
+
+return
+
+}
+
+let filtered=products.filter(p=>p.category==cat)
+
+displayProducts(filtered)
+
+}
+
+/* CART */
+
+function toggleCart(){
+
+cartPanel.style.display=
+cartPanel.style.display=="block"?"none":"block"
+
+showCart()
+
+}
+function closeCart(){
+    cartPanel.style.display="none";
+}
+
+function addCart(i){
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    let existing = cart.find(item => item.name === products[i].name);
+    if(existing){
+        existing.qty += 1;
+    } else {
+        cart.push({...products[i], qty:1});
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Added to cart");
+}
+
+
+function showCart(){
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[]
+
+cartItems.innerHTML=""
+
+let total=0
+
+cart.forEach(item=>{
+
+cartItems.innerHTML+=`
+<p>${item.name} - ₱${item.price}</p>
+`
+
+total+=Number(item.price)
+
+})
+
+total.innerText="Total: ₱"+total
+
+}
+
+/* CHECKOUT */
+
+function checkout(){
+
+localStorage.removeItem("cart")
+
+cartItems.innerHTML=""
+
+total.innerText="Total: ₱0"
+
+alert("Thank you for shopping!")
+
+}
+
+/* RATING */
+
+function rate(i){
+
+alert("Thanks for rating!")
+
+}
+
+</script>
+
+</body>
+</html>
