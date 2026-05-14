@@ -526,18 +526,20 @@ function closeCart(){
 }
 
 function addCart(i){
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-let products=JSON.parse(localStorage.getItem("products"))||[]
+    let existing = cart.find(item => item.name === products[i].name);
+    if(existing){
+        existing.qty += 1;
+    } else {
+        cart.push({...products[i], qty:1});
+    }
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[]
-
-cart.push(products[i])
-
-localStorage.setItem("cart",JSON.stringify(cart))
-
-alert("Added to cart")
-
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Added to cart");
 }
+
 
 function showCart(){
 
