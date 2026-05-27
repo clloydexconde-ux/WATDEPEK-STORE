@@ -403,10 +403,13 @@ alert("Your password is incorrect")
 }
 
 function logout(){
-
-location.reload()
-
+    let confirmLogout = confirm("Are you sure you want to log out?");
+    if(confirmLogout){
+        location.reload();  // proceed with logout
+    }
+    // if Cancel is clicked, do nothing
 }
+
 
 /* SELLER MODE */
 
