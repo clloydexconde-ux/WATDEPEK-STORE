@@ -208,7 +208,13 @@ overflow:auto;
 <div class="search">
 <input id="searchInput" placeholder="Search product..." onkeyup="searchProduct()">
 </div>
-
+ <!-- Sorting dropdown -->
+  <select id="sortOption" onchange="sortProducts()">
+    <option value="">Sort by</option>
+    <option value="low">Price: Low to High</option>
+    <option value="high">Price: High to Low</option>
+  </select>
+</div>
 <div class="main">
 
 <!-- SIDEBAR -->
@@ -346,19 +352,25 @@ closeProfile()
 /* USERS */
 
 function register(){
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let user = username.value.trim();
+    let pass = password.value.trim();
 
-let users=JSON.parse(localStorage.getItem("users"))||[]
+    if(!user || !pass){
+        alert("Please fill in all fields");
+        return;
+    }
 
-let user=username.value
-let pass=password.value
+    if(users.find(u => u.user === user)){
+        alert("Username already exists");
+        return;
+    }
 
-users.push({user,pass})
-
-localStorage.setItem("users",JSON.stringify(users))
-
-alert("Account created")
-
+    users.push({user, pass});
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Account created");
 }
+
 
 function login(){
 
@@ -542,40 +554,45 @@ function addCart(i){
 
 
 function showCart(){
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cartItems.innerHTML = "";
+    let total = 0;
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[]
+    cart.forEach((item, index)=>{
+        cartItems.innerHTML += `
+          <p>${item.name} (x${item.qty}) - ₱${item.price * item.qty}
+          <button onclick="removeItem(${index})">❌ Remove</button></p>
+        `;
+        total += item.price * item.qty;
+    });
 
-cartItems.innerHTML=""
-
-let total=0
-
-cart.forEach(item=>{
-
-cartItems.innerHTML+=`
-<p>${item.name} - ₱${item.price}</p>
-`
-
-total+=Number(item.price)
-
-})
-
-total.innerText="Total: ₱"+total
-
+    totalPrice.innerText = "Total: ₱" + total;
 }
+
+function removeItem(index){
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.splice(index,1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    showCart();
+}
+
+
 
 /* CHECKOUT */
 
 function checkout(){
+    let profile = JSON.parse(localStorage.getItem("profile")) || {};
+    if(!profile.fullname || !profile.address || !profile.contact){
+        alert("Please complete your profile before checkout!");
+        return;
+    }
 
-localStorage.removeItem("cart")
-
-cartItems.innerHTML=""
-
-total.innerText="Total: ₱0"
-
-alert("Thank you for shopping!")
-
+    localStorage.removeItem("cart");
+    cartItems.innerHTML = "";
+    totalPrice.innerText = "Total: ₱0";
+    alert(`Thank you ${profile.fullname}! Your order will be delivered to ${profile.address}.`);
 }
+
 
 /* RATING */
 
@@ -584,7 +601,16 @@ function rate(i){
 alert("Thanks for rating!")
 
 }
+/* PRODUCT SORTING */
+function sortProducts(){
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+    let option = document.getElementById("sortOption").value;
 
+    if(option === "low") products.sort((a,b)=>a.price - b.price);
+    if(option === "high") products.sort((a,b)=>b.price - a.price);
+
+    displayProducts(products);
+}
 </script>
 
 </body>
