@@ -566,8 +566,11 @@ function showCart(){
 
     cart.forEach((item, index)=>{
         cartItems.innerHTML += `
-          <p>${item.name} (x${item.qty}) - ₱${item.price * item.qty}
-          <button onclick="removeItem(${index})">❌ Remove</button></p>
+          <div style="display:flex;align-items:center;margin-bottom:10px;">
+            <img src="${item.image}" style="width:50px;height:50px;object-fit:cover;margin-right:10px;">
+            <p style="flex:1;">${item.name} (x${item.qty}) - ₱${item.price * item.qty}</p>
+            <button onclick="removeItem(${index})">❌ Remove</button>
+          </div>
         `;
         total += item.price * item.qty;
     });
