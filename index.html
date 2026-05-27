@@ -621,6 +621,15 @@ function rate(i){
     loadProducts();
 
     alert("Thanks for rating!");
+    
+}
+// set rating
+function setRating(i, value){
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+    products[i].rating = value;  // Save chosen rating
+    localStorage.setItem("products", JSON.stringify(products));
+    loadProducts();  // Refresh product list
+    alert(`You rated ${products[i].name} ${value} star(s)!`);
 }
 
 </script>
