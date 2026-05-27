@@ -618,7 +618,7 @@ function rate(i){
     alert("Thanks for rating!");
     
 }
-// set rating
+//SET RATINGS
 function setRating(i, value){
     let products = JSON.parse(localStorage.getItem("products")) || [];
     products[i].rating = value;  // Save chosen rating
@@ -626,6 +626,15 @@ function setRating(i, value){
     loadProducts();  // Refresh product list
     alert(`You rated ${products[i].name} ${value} star(s)!`);
 }
+ //REMOVE PRODUCT BY SELLER
+ function removeProduct(index){
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+    let removed = products.splice(index,1);  // remove product
+    localStorage.setItem("products", JSON.stringify(products));
+    loadProducts();
+    alert(`${removed[0].name} has been removed from the market.`);
+}
+
 
 </script>
 
