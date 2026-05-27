@@ -199,7 +199,8 @@ overflow:auto;
 <img class="user-img" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
 
 <button onclick="sellerMode()">Seller</button>
-<button onclick="logout()">Logout</button>
+<button onclick="openLogoutModal()">Logout</button>
+
 
 </div>
 
@@ -207,6 +208,25 @@ overflow:auto;
 
 <div class="search">
 <input id="searchInput" placeholder="Search product..." onkeyup="searchProduct()">
+</div>
+ <!-- Logout Confirmation Modal -->
+<div id="logoutModal" style="
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  display:none;
+  width:300px;
+  box-shadow:0 0 10px rgba(0,0,0,0.3);
+  text-align:center;
+">
+  <h3>Confirm Logout</h3>
+  <p>Are you sure you want to log out?</p>
+  <button onclick="confirmLogout()">Yes</button>
+  <button onclick="closeLogoutModal()">Cancel</button>
 </div>
  <!-- Sorting dropdown -->
   <select id="sortOption" onchange="sortProducts()">
@@ -636,6 +656,18 @@ function setRating(i, value){
     localStorage.setItem("products", JSON.stringify(products));
     loadProducts();
     alert(`${removed[0].name} has been removed from the market.`);
+}
+ //LOG OUT BUTTON
+function openLogoutModal(){
+    document.getElementById("logoutModal").style.display = "block";
+}
+
+function closeLogoutModal(){
+    document.getElementById("logoutModal").style.display = "none";
+}
+
+function confirmLogout(){
+    location.reload(); // proceed with logout
 }
 
 
