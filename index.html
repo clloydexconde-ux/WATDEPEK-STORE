@@ -482,18 +482,13 @@ function displayProducts(list){
             </div>
             <p class="price">₱${p.price}</p>
             <button onclick="addCart(${i})">Add to Cart</button>
+            ${sellerPanel.style.display === "block" ? 
+              `<button onclick="removeProduct(${i})">❌ Remove</button>` : ""}
         </div>
         `;
     });
 }
 
-</div>
-
-`
-
-})
-
-}
 
 /* SEARCH */
 
