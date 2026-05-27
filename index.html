@@ -241,26 +241,30 @@ overflow:auto;
 <!-- SELLER PANEL -->
 
 <div id="sellerPanel">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <h3>Add Product</h3>
+    <!-- Exit button -->
+    <button class="exit-btn" onclick="userMode()">✖ Exit</button>
+  </div>
 
-<h3>Add Product</h3>
+  <input id="pname" placeholder="Product Name">
+  <input id="pprice" placeholder="Price">
 
-<input id="pname" placeholder="Product Name">
-<input id="pprice" placeholder="Price">
+  <select id="pcategory">
+    <option>Grocery</option>
+    <option>Can</option>
+    <option>Detergent</option>
+    <option>Hardware</option>
+    <option>School</option>
+    <option>Hygiene</option>
+    <option>Electronics</option>
+  </select>
 
-<select id="pcategory">
-<option>Grocery</option>
-<option>Can</option>
-<option>Detergent</option>
-<option>Hardware</option>
-<option>School</option>
-<option>Hygiene</option>
-<option>Electronics</option>
-</select>
+  <input type="file" id="pimage">
 
-<input type="file" id="pimage">
+  <button onclick="addProduct()">Upload Product</button>
+</div>
 
-<button onclick="addProduct()">Upload Product</button>
-<button onclick="userMode()">Exit</button>
 
 
 </div>
