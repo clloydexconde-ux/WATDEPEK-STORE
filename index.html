@@ -466,26 +466,26 @@ displayProducts(products)
 }
 
 function displayProducts(list){
+    products.innerHTML = "";
 
-products.innerHTML=""
-
-list.forEach((p,i)=>{
-
-products.innerHTML+=`
-
-<div class="product">
-
-<img src="${p.image}">
-
-<h4>${p.name}</h4>
-
-<div class="rating">${"⭐".repeat(p.rating)}${"☆".repeat(5 - p.rating)}</div>
-
-<p class="price">₱${p.price}</p>
-
-<button onclick="addCart(${i})">Add to Cart</button>
-
-<button onclick="rate(${i})">⭐ Rate</button>
+    list.forEach((p,i)=>{
+        products.innerHTML += `
+        <div class="product">
+            <img src="${p.image}">
+            <h4>${p.name}</h4>
+            <div class="rating">
+                ${[1,2,3,4,5].map(star => `
+                    <span onclick="setRating(${i},${star})">
+                        ${p.rating >= star ? "⭐" : "☆"}
+                    </span>
+                `).join("")}
+            </div>
+            <p class="price">₱${p.price}</p>
+            <button onclick="addCart(${i})">Add to Cart</button>
+        </div>
+        `;
+    });
+}
 
 </div>
 
