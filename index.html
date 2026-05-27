@@ -604,22 +604,25 @@ function checkout(){
 
 
 /* RATING */
-
 function rate(i){
-
-alert("Thanks for rating!")
-
-}
-/* PRODUCT SORTING */
-function sortProducts(){
     let products = JSON.parse(localStorage.getItem("products")) || [];
-    let option = document.getElementById("sortOption").value;
 
-    if(option === "low") products.sort((a,b)=>a.price - b.price);
-    if(option === "high") products.sort((a,b)=>b.price - a.price);
+    // Increase rating count for the product
+    products[i].rating = (products[i].rating || 0) + 1;
 
-    displayProducts(products);
+    // Limit rating to max 5 stars
+    if(products[i].rating > 5){
+        products[i].rating = 5;
+    }
+
+    localStorage.setItem("products", JSON.stringify(products));
+
+    // Refresh product list to show updated stars
+    loadProducts();
+
+    alert("Thanks for rating!");
 }
+
 </script>
 
 </body>
